@@ -9,7 +9,7 @@ import (
 
 	"github.com/ghetzel/cli"
 	"github.com/ghetzel/go-stockutil/log"
-	"github.com/ghetzel/shmtool/shm"
+	"github.com/nva74/shmtool/shm"
 )
 
 const DefaultLogLevel = `info`

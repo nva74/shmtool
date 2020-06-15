@@ -15,6 +15,22 @@ int sysv_shm_open(int size, int flags, int perm) {
     }
 }
 
+int sysv_shm_open_key(int key, int size, int flags, int perm) {
+    int shm_id;
+
+    if(size) {
+        // unless otherwise specified, segment is owner-read/write (no exec)
+        if(!perm){
+            perm = 0600;
+        }
+
+        return shmget(key, size, flags|perm);
+    } else {
+        return shmget(key, size, 0);
+    }
+}
+
+
 int sysv_shm_write(int shm_id, void* input, int len, int offset) {
     // attach to the given segment to get its memory address
     char* addr = sysv_shm_attach(shm_id);

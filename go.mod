@@ -1,4 +1,4 @@
-module github.com/ghetzel/shmtool
+module github.com/nva74/shmtool
 
 go 1.12
 

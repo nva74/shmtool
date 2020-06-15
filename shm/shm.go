@@ -63,6 +63,25 @@ func Open(id int) (*Segment, error) {
 	}
 }
 
+// OpenSegmentKey an existing shared memory segment located at the given Key.  ID is returned in the
+// struct that is populated by Create(), or by the shmget() system call.
+//
+func OpenSegmentKey(key int, size int, flags SharedMemoryFlags, perms os.FileMode) (*Segment, error) {
+	if shmid, err := C.sysv_shm_open_key(C.int(key), C.int(size), C.int(flags), C.int(perms)); err == nil {
+		if actual_size, err := C.sysv_shm_get_size(shmid); err != nil {
+			return nil, fmt.Errorf("Failed to retrieve SHM size: %v", err)
+		} else {
+			return &Segment{
+				Id:   int(shmid),
+				Size: int64(actual_size),
+			}, nil
+		}
+
+	} else {
+		return nil, err
+	}
+}
+
 // Creates a shared memory segment of a given size, and also allows for the specification of
 // creation flags supported by the shmget() call, as well as specifying permissions.
 //
